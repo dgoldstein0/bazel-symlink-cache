@@ -1,0 +1,12 @@
+It seems that Bazel is mistakenly caching test results even if symlinks change. 
+To repro:
+
+- clone this repo
+- `bazel test //playground:test` -- it should fail
+- uncomment line 6 in //playground/BUILD
+- `bazel test //playground:test` -- Bazel will notice that things have changed 
+and rebuild/rerun the test and it should pass
+- comment line 6 in //playground/BUILD
+- `bazel test //playground:test` -- Bazel will use the prior cached test result
+even though this symlink should now be gone.
+
